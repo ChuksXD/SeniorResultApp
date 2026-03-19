@@ -1,78 +1,175 @@
-# Getting Started with Create React App
+# Senior Result App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Senior Result App is a React web application for generating printable senior secondary school result sheets from Continuous Assessment data files.
+
+The app accepts .xlsx and .csv uploads, extracts student scores, and renders an individual report page per student.
+
+## Features
+
+- Upload CA sheet in .xlsx or .csv format
+- Parse student records from a fixed school template
+- Open a dedicated result view for each student
+- Configure grade boundaries (Outstanding, Excellent, Very Good, Good, Fair)
+- Automatically compute display labels for:
+  - Subject grade
+  - Pass/Fail remark
+  - Overall performance band
+- Client-side routing for student pages (React Router)
+- Ready for Firebase Hosting deployment
+
+## Tech Stack
+
+- React 17
+- Create React App
+- React Router DOM v5
+- read-excel-file (XLSX parsing)
+- Papa Parse (CSV parsing)
+- Firebase Hosting
+
+## Project Structure
+
+```text
+.
+├── public/
+├── src/
+│   ├── App.js
+│   ├── ButtonList.js
+│   ├── ResultDisplay.js
+│   └── ...
+├── firebase.json
+└── package.json
+```
+
+## Prerequisites
+
+- Node.js 16+ (or current LTS)
+- npm
+- Optional for deployment: Firebase CLI
+
+## Getting Started
+
+1. Install dependencies:
+
+  ```bash
+  npm install
+  ```
+
+2. Start development server:
+
+  ```bash
+  npm start
+  ```
+
+3. Open in browser:
+
+  ```text
+  http://localhost:3000
+  ```
+
+## Usage
+
+1. Open the app.
+2. Upload a CA sheet (.xlsx or .csv).
+3. (Optional) Click Show Grade Settings and adjust score thresholds.
+4. Click Generate result Data.
+5. Click a student name to open that student’s report page.
+
+## Input File Expectations (Important)
+
+The parser expects a specific sheet structure:
+
+- Header row is expected on row index 1 (second row in spreadsheet).
+- Student records begin from row index 3 (fourth row).
+- Student rows stop when the second column (student name field) is empty.
+- First columns should include:
+  - S/N
+  - NAME
+- Each subject is expected in 3 columns:
+  - C.A
+  - Exam
+  - Total
+- Tail columns may include:
+  - TOTAL
+  - AVERAGE
+  - REMARK
+  - POSITION
+
+This project currently renders a fixed-size report table and is optimized for the existing school template (up to 18 subject rows displayed).
+
+## Grade Settings
+
+Default thresholds:
+
+- Pass mark: 50
+- Outstanding: 90+
+- Excellent: 80+
+- Very Good: 70+
+- Good: 60+
+- Fair: 50+
+- Below Fair: Poor
+
+These can be changed from the UI before generating student pages.
 
 ## Available Scripts
 
-In the project directory, you can run:
+- npm start — run app in development mode
+- npm test — run tests
+- npm run build — create production build in build/
+- npm run eject — eject CRA configuration (irreversible)
 
-### `npm start`
+## Build for Production
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-### deploy to firebase
-firebase login
+```bash
 npm run build
-firebase init hosting
+```
 
-firebase deploy --only hosting
+The production output is created in the build/ folder.
+
+## Deploy to Firebase Hosting
+
+1. Install Firebase CLI (if needed):
+
+  ```bash
+  npm install -g firebase-tools
+  ```
+
+2. Log in:
+
+  ```bash
+  firebase login
+  ```
+
+3. Build the app:
+
+  ```bash
+  npm run build
+  ```
+
+4. Deploy hosting:
+
+  ```bash
+  firebase deploy --only hosting
+  ```
+
+The firebase.json is already configured to:
+
+- serve from build/
+- rewrite all routes to /index.html (supports React Router pages)
+
+## Known Limitations
+
+- Report layout is highly template-specific.
+- Subject rows are currently hard-coded in the result display.
+- Invalid or differently structured files may parse incorrectly.
+
+## Future Improvements
+
+- Dynamically render any number of subjects
+- Better validation with user-friendly upload errors
+- Template import guide/sample file
+- Export to PDF/print improvements
+
+## License
+
+No license file is currently defined in this repository.
 
