@@ -1,5 +1,5 @@
 import React from 'react'
-import  {useLocation} from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import './ResultDisplay.css'
 
 function toTitleCase(str) {
@@ -10,18 +10,31 @@ function toTitleCase(str) {
     .join(' ');
 }
 
-export default function ResultDisplay({filename,length}) {
+export default function ResultDisplay({filename, length, schoolInfo}) {
     const location = useLocation();
-    const result =location.state.data;
+    const history = useHistory();
+
+    if (!location.state) {
+      return (
+        <div style={{ padding: '2rem' }}>
+          <p>No student data found. Please go back and select a student from the list.</p>
+          <button onClick={() => history.push('/')}>Back to Home</button>
+        </div>
+      );
+    }
+
+    const result = location.state.data;
     const subjects = location.state.subjects;
     const gradeData = location.state.gradeData;
-    
-    
+    const stateSchoolInfo = location.state.schoolInfo || schoolInfo || {};
+
     return (
+<>
+<button className="no-print back-btn" onClick={() => history.goBack()}>&#8592; Back to List</button>
 <table className="tg">
 <thead>
   <tr>
-    <th className="tg-fuxe" colSpan="12" rowSpan="10">                                    <span style={{fontWeight:"bold",fontSize:"larger", marginLeft: "250px", fontFamily:"monospace"}}>Bethel College Aboh Urban</span><br/>          <br/>                       <span style={{fontWeight:"bold",fontStyle:"italic",fontSize: "smaller",marginLeft: "250px"}}>Ezinihitte Mbaise L.GA Imo State Nigeria</span><br/>  <br/>Report for <p style={{borderBottom:"1.5px currentColor dotted", width:"30%", display:"inline-block" ,marginBottom:"0px"}}><span>{filename[1]}</span> </p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                    Term................  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Year.........<br/>Name of Student: <p style={{borderBottom:"1.5px currentColor dotted", width:"30%", display:"inline-block" ,marginBottom:"0px"}}><span>{result[1]}</span></p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sex  ...................... <br/>Class: <p style={{borderBottom:"1.5px currentColor dotted", width:"30%", display:"inline-block" ,marginBottom:"10px"}}><span>{filename[0]}</span> </p>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                   Admission No: <p style={{borderBottom:"1.5px currentColor dotted", width:"15%", display:"inline-block" ,marginBottom:"10px"}}><span>{result[0]}</span> </p><br/>Class Average Age......................................                                                                      </th>
+    <th className="tg-fuxe" colSpan="12" rowSpan="10">                                    <span style={{fontWeight:"bold",fontSize:"larger", marginLeft: "250px", fontFamily:"monospace"}}>{stateSchoolInfo.name}</span><br/>          <br/>                       <span style={{fontWeight:"bold",fontStyle:"italic",fontSize: "smaller",marginLeft: "250px"}}>{stateSchoolInfo.location}</span><br/>  <br/>Report for <p style={{borderBottom:"1.5px currentColor dotted", width:"30%", display:"inline-block" ,marginBottom:"0px"}}><span>{filename[1]}</span> </p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                    Term................  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Year.........<br/>Name of Student: <p style={{borderBottom:"1.5px currentColor dotted", width:"30%", display:"inline-block" ,marginBottom:"0px"}}><span>{result[1]}</span></p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sex  ...................... <br/>Class: <p style={{borderBottom:"1.5px currentColor dotted", width:"30%", display:"inline-block" ,marginBottom:"10px"}}><span>{filename[0]}</span> </p>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                   Admission No: <p style={{borderBottom:"1.5px currentColor dotted", width:"15%", display:"inline-block" ,marginBottom:"10px"}}><span>{result[0]}</span> </p><br/>Class Average Age......................................                                                                      </th>
   </tr>
   <tr>
   </tr>
@@ -314,6 +327,7 @@ export default function ResultDisplay({filename,length}) {
   </tr>
 </tbody>
 </table>
+</>
     )
 }
 
